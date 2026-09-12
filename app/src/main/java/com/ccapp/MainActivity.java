@@ -187,4 +187,5 @@ public final class MainActivity extends Activity {
     }
 
     private void showToast(int id) { Toast.makeText(this, id, Toast.LENGTH_LONG).show(); }
+    private void showToast(String message) { Toast.makeText(this, message, Toast.LENGTH_LONG).show(); }
 }
