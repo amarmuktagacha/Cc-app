@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Cc Cache Cleaner</string>
+    <string name="cache_cleanup_title">Clean phone cache</string>
+    <string name="cache_cleanup_explanation">Reclaim temporary cache space using Android Package Manager. This action does not clear app data or sign you out.</string>
+    <string name="cache_cleanup_note">Only package cache files are targeted. Personal files, photos, downloads, accounts, and app data are not deleted.</string>
+    <string name="clean_cache_button">Clean cache</string>
+    <string name="shizuku_grant">Connect Shizuku</string>
+    <string name="shizuku_not_running">Shizuku is not running. Start Shizuku, then return here.</string>
+    <string name="shizuku_permission_needed">Shizuku is running, but permission is required.</string>
+    <string name="shizuku_ready">Shizuku is connected and ready.</string>
+    <string name="shizuku_unavailable">Shizuku is unavailable or permission was denied.</string>
+    <string name="confirm_title">Clean cache?</string>
+    <string name="confirm_message">Android will ask Package Manager to trim package cache files. App data, accounts, and personal files will remain untouched.</string>
+    <string name="confirm_action">Clean now</string>
+    <string name="cleaning">Cleaning cache…</string>
+    <string name="cleanup_complete">Cache cleanup completed.</string>
+    <string name="cleanup_failed">Cache cleanup could not be completed: %1$s</string>
+</resources>
