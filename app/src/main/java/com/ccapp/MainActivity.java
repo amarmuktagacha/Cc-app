@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 
 import rikka.shizuku.Shizuku;
@@ -152,7 +153,13 @@ public final class MainActivity extends Activity {
             try {
                 // pm trim-caches only asks PackageManager to reclaim package cache files.
                 // It does not clear app data, accounts, media, documents, or other user files.
-                Process process = Shizuku.newProcess(new String[]{"/system/bin/pm", "trim-caches", "999G"}, null, null);
+                // Shizuku 13 keeps newProcess private; invoke the API-compatible
+                // method reflectively so this app also builds against 13.1.5.
+                Method method = Shizuku.class.getDeclaredMethod(
+                        "newProcess", String[].class, String[].class, String.class);
+                method.setAccessible(true);
+                Process process = (Process) method.invoke(null,
+                        new String[]{"/system/bin/pm", "trim-caches", "999G"}, null, null);
                 output = readAll(process.getInputStream()) + readAll(process.getErrorStream());
                 exitCode = process.waitFor();
             } catch (SecurityException e) {
@@ -166,7 +173,7 @@ public final class MainActivity extends Activity {
                 progress.setVisibility(View.GONE);
                 updateShizukuStatus();
                 if (result == 0) showToast(R.string.cleanup_complete);
-                else showToast(getString(R.string.cleanup_failed, details.trim()));
+                else showToast(getString(R.string.cleanup_failed) + details.trim());
             });
         }, "cache-cleanup").start();
     }
