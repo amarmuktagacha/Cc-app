@@ -46,6 +46,11 @@ class CacheClearActivity : AppBarActivity() {
             text = resources.getQuantityString(R.plurals.cache_clear_app_count, apps.size, apps.size)
             setPadding(0, 0, 0, 16)
         })
+        root.addView(Button(this).apply {
+            text = getString(R.string.cache_clear_all_button)
+            isEnabled = apps.isNotEmpty()
+            setOnClickListener { confirmClearAll(this) }
+        })
 
         list = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         if (apps.isEmpty()) {
@@ -63,6 +68,37 @@ class CacheClearActivity : AppBarActivity() {
             setPadding(0, 16, 0, 0)
         })
         setContentView(root)
+    }
+
+    private fun confirmClearAll(button: Button) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.cache_clear_all_confirm_title)
+            .setMessage(getString(R.string.cache_clear_all_confirm_message, apps.size))
+            .setNegativeButton(android.R.string.cancel, null)
+            .setPositiveButton(R.string.cache_clear_all_button) { _, _ -> clearAllCaches(button) }
+            .show()
+    }
+
+    private fun clearAllCaches(allButton: Button) {
+        allButton.isEnabled = false
+        allButton.text = getString(R.string.cache_clear_working)
+        lifecycleScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                var cleared = 0
+                var failed = 0
+                apps.forEach { info ->
+                    if (clearPackageCache(info.packageName) == null) cleared++ else failed++
+                }
+                cleared to failed
+            }
+            allButton.isEnabled = true
+            allButton.text = getString(R.string.cache_clear_all_button)
+            android.widget.Toast.makeText(
+                this@CacheClearActivity,
+                getString(R.string.cache_clear_all_result, result.first, result.second),
+                android.widget.Toast.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun addAppRow(info: ApplicationInfo) {
@@ -97,22 +133,7 @@ class CacheClearActivity : AppBarActivity() {
         button.text = getString(R.string.cache_clear_working)
         lifecycleScope.launch {
             val error = withContext(Dispatchers.IO) {
-                try {
-                    val method: Method = Shizuku::class.java.getDeclaredMethod(
-                        "newProcess", Array<String>::class.java, Array<String>::class.java, String::class.java
-                    )
-                    method.isAccessible = true
-                    val process = method.invoke(
-                        null,
-                        arrayOf("pm", "clear", "--cache-only", info.packageName),
-                        null,
-                        null
-                    ) as Process
-                    val output = BufferedReader(InputStreamReader(process.inputStream)).use { it.readText() }
-                    if (process.waitFor() == 0) null else output.ifBlank { "exit code ${process.exitValue()}" }
-                } catch (e: Throwable) {
-                    e.message ?: e.javaClass.simpleName
-                }
+                clearPackageCache(info.packageName)
             }
             if (error == null) {
                 button.text = getString(R.string.cache_clear_done)
@@ -122,6 +143,25 @@ class CacheClearActivity : AppBarActivity() {
                 button.text = getString(R.string.cache_clear_app_button)
                 android.widget.Toast.makeText(this@CacheClearActivity, getString(R.string.cache_clear_failed, error), android.widget.Toast.LENGTH_LONG).show()
             }
+        }
+    }
+
+    private fun clearPackageCache(packageName: String): String? {
+        return try {
+            val method: Method = Shizuku::class.java.getDeclaredMethod(
+                "newProcess", Array<String>::class.java, Array<String>::class.java, String::class.java
+            )
+            method.isAccessible = true
+            val process = method.invoke(
+                null,
+                arrayOf("pm", "clear", "--cache-only", packageName),
+                null,
+                null
+            ) as Process
+            val output = BufferedReader(InputStreamReader(process.inputStream)).use { it.readText() }
+            if (process.waitFor() == 0) null else output.ifBlank { "exit code ${process.exitValue()}" }
+        } catch (e: Throwable) {
+            e.message ?: e.javaClass.simpleName
         }
     }
 }

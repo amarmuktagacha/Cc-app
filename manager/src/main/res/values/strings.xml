@@ -93,6 +93,10 @@
     <string name="cache_clear_working">Clearing…</string>
     <string name="cache_clear_done">Cleared</string>
     <string name="cache_clear_app_success">App cache cleared.</string>
+    <string name="cache_clear_all_button">Clear all app caches</string>
+    <string name="cache_clear_all_confirm_title">Clear all app caches?</string>
+    <string name="cache_clear_all_confirm_message">Clear temporary cache files from all %d listed apps? App data and account information will remain.</string>
+    <string name="cache_clear_all_result">Finished: %1$d apps cleared, %2$d failed.</string>
 
     <!-- Home - Learn more -->
     <string name="home_learn_more_title">Learn Shizuku</string>
