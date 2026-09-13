@@ -88,6 +88,11 @@
     <string name="cache_clear_requires_shizuku">Start Shizuku first. This feature needs Shizuku permission to run the system package manager.</string>
     <string name="cache_clear_success">Phone cache cleanup completed.</string>
     <string name="cache_clear_failed">Could not clear phone cache: %s</string>
+    <string name="cache_clear_app_button">Clear cache</string>
+    <string name="cache_clear_app_confirm_message">Clear only the temporary cache for %1$s? App data and account information will remain.</string>
+    <string name="cache_clear_working">Clearing…</string>
+    <string name="cache_clear_done">Cleared</string>
+    <string name="cache_clear_app_success">App cache cleared.</string>
 
     <!-- Home - Learn more -->
     <string name="home_learn_more_title">Learn Shizuku</string>
