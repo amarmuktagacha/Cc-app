@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Cc</string>
+    <string name="title_activity_main">Cc</string>
+    <string name="package_name">com.amarmuktagacha.cc</string>
+    <string name="custom_url_scheme">com.amarmuktagacha.cc</string>
+</resources>
