@@ -1,14 +1,3 @@
 node_modules
-.vercel
-.tanstack
-.grok
-.output
 dist
-artifacts
-screenshots
-*.log
-.env
-.env.*
-.project_id
-.node_modules.lock
 .DS_Store
