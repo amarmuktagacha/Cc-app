@@ -1,5 +1,6 @@
 import { Check, Clipboard, Link2, LockKeyhole, Plus, Scissors, Sparkles, Zap } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createRoot } from "react-dom/client";
 import "./styles.css";
 
 const PREFIX = "#s/";
@@ -63,3 +64,5 @@ function App() {
 function Feature({ icon, title, text }: { icon: ReactNode; title: string; text: string }) { return <div className="feature"><span className="feature-icon">{icon}</span><div><strong>{title}</strong><span>{text}</span></div></div>; }
 
 export default App;
+
+createRoot(document.getElementById("root")!).render(<App />);
