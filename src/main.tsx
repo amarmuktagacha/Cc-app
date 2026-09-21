@@ -23,10 +23,10 @@ function App() {
     if (!validUrl(clean)) return setError("সঠিক http:// অথবা https:// URL দিন");
     setLoading(true); setError(""); setShortUrl(""); setCopied(false);
     try {
-      const response = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(clean)}`, { cache: "no-store" });
-      const data = await response.json() as { shorturl?: string; errormessage?: string };
-      if (!response.ok || !data.shorturl) throw new Error(data.errormessage || "লিংক ছোট করা যায়নি");
-      setShortUrl(data.shorturl);
+      const response = await fetch(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(clean)}`, { cache: "no-store" });
+      const generated = (await response.text()).trim();
+      if (!response.ok || !generated.startsWith("https://tinyurl.com/")) throw new Error("লিংক ছোট করা যায়নি। আবার চেষ্টা করুন");
+      setShortUrl(generated);
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "লিংক ছোট করা যায়নি। আবার চেষ্টা করুন");
     } finally { setLoading(false); }
